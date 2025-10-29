@@ -3,78 +3,272 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login - Entre Alunos</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Login & Cadastro</title>
 <style>
-  body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#25478a 0%, #17305e 100%);}
-  .container{max-width:400px;margin:6rem auto;background:white;padding:2rem;border-radius:1rem;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #1E3A8A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+  }
+  .container {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 30px;
+    width: 320px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  h2 {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  label {
+    font-weight: bold;
+    font-size: 13px;
+  }
+  input, select, button {
+    width: 100%;
+    margin: 8px 0 15px 0;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    background: #6C63FF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #574ef6;
+  }
+  .toggle-link {
+    color: #1E3A8A;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+    margin-top: -10px;
+  }
+  .error-msg {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: none;
+  }
+  .forgot-password {
+    text-align: right;
+    color: #1E3A8A;
+    font-size: 12px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+  #back-to-login {
+    background: #ccc;
+    color: #333;
+    margin-top: -10px;
+  }
+  #back-to-login:hover {
+    background: #aaa;
+  }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h2 class="text-xl font-bold mb-4 text-center text-slate-800">Login Entre Alunos</h2>
-    <form id="login-form" class="flex flex-col gap-3">
-      <input type="text" name="email" placeholder="Email" class="border rounded px-3 py-2 text-slate-900"/>
-      <input type="password" name="password" placeholder="Senha" class="border rounded px-3 py-2 text-slate-900"/>
-      
-      <select id="role" class="border rounded px-3 py-2 text-slate-900">
-        <option value="">Selecione seu papel</option>
-        <option value="Aluno">Aluno</option>
-        <option value="Gestor">Gestor</option>
-      </select>
-      
-      <input type="password" id="manager-password" placeholder="Senha do gestor (se for gestor)" class="border rounded px-3 py-2 text-slate-900"/>
-      
-      <div id="login-error" class="text-red-500 text-sm hidden"></div>
-      
-      <button type="submit" class="bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Entrar</button>
-    </form>
-  </div>
 
-  <script>
-    function clearErrors(){ document.getElementById('login-error').style.display='none'; }
+<div class="container" id="login-container">
+  <h2>Login</h2>
+  <div class="error-msg" id="login-error"></div>
+  <form id="login-form" autocomplete="off">
+    <label for="role">Escolha seu papel</label>
+    <select id="role" required>
+      <option value="" disabled selected>Selecione</option>
+      <option value="Aluno">Aluno</option>
+      <option value="Gestor">Gestor/Professor</option>
+    </select>
+    
+    <div id="manager-pass-container" style="display:none;">
+      <label for="manager-password">Senha do Gestor</label>
+      <input type="password" id="manager-password" placeholder="Digite a senha do gestor" />
+    </div>
 
-    // função fictícia de validação (substitua pela sua lógica real)
-    function validarLogin(email, senha){
-      if(!email || !senha) return null;
-      return {nome: email.split('@')[0], email};
+    <label for="login-email">Email</label>
+    <input type="email" id="login-email" name="email" placeholder="Digite seu e-mail" required />
+
+    <label for="login-password">Senha</label>
+    <input type="password" id="login-password" name="password" placeholder="••••••••" required />
+
+    <div class="forgot-password" id="forgot-password-link">Esqueceu a senha?</div>
+    <button type="submit">Entrar</button>
+  </form>
+  <div class="toggle-link" id="go-to-register">Não tem uma conta? Cadastre-se</div>
+</div>
+
+<div class="container" id="register-container" style="display:none;">
+  <h2>Cadastro</h2>
+  <div class="error-msg" id="register-error"></div>
+  <form id="register-form" autocomplete="off">
+    <label for="name">Nome</label>
+    <input type="text" id="name" name="name" placeholder="Seu nome completo" required />
+    <label for="birthdate">Data de nascimento</label>
+    <input type="date" id="birthdate" name="birthdate" required />
+    <label for="register-email">Email</label>
+    <input type="email" id="register-email" name="email" placeholder="Digite seu e-mail" required />
+    <label for="gender">Gênero</label>
+    <select id="gender" name="gender" required>
+      <option value="" disabled selected>Selecione</option>
+      <option value="Feminino">Feminino</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Prefiro não dizer">Prefiro não dizer</option>
+    </select>
+    <label for="register-password">Senha</label>
+    <input type="password" id="register-password" name="password" placeholder="••••••••" required />
+    <button type="submit">Cadastrar</button>
+    <button type="button" id="back-to-login">Voltar para login</button>
+  </form>
+</div>
+
+<script>
+  // Alternar entre login e cadastro
+  const loginContainer = document.getElementById('login-container');
+  const registerContainer = document.getElementById('register-container');
+ 
+  document.getElementById('go-to-register').onclick = () => {
+    loginContainer.style.display = 'none';
+    registerContainer.style.display = 'block';
+    clearErrors();
+  };
+ 
+  document.getElementById('back-to-login').onclick = () => {
+    registerContainer.style.display = 'none';
+    loginContainer.style.display = 'block';
+    clearErrors();
+  };
+
+  function clearErrors() {
+    document.getElementById('login-error').style.display = 'none';
+    document.getElementById('register-error').style.display = 'none';
+  }
+
+  // Mostrar campo de senha do gestor
+  const roleSelect = document.getElementById('role');
+  const managerPassContainer = document.getElementById('manager-pass-container');
+  roleSelect.addEventListener('change', () => {
+    if (roleSelect.value === 'Gestor') {
+      managerPassContainer.style.display = 'block';
+    } else {
+      managerPassContainer.style.display = 'none';
+    }
+  });
+
+  // Salvar usuário no localStorage
+  function salvarUsuario(usuario) {
+    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    if (usuarios.some(u => u.email.toLowerCase() === usuario.email.toLowerCase())) return false;
+    usuarios.push(usuario);
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    return true;
+  }
+
+  // Validar login
+  function validarLogin(email, senha) {
+    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    return usuarios.find(u => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha);
+  }
+
+  // Cadastro
+  document.getElementById('register-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    clearErrors();
+
+    const nome = this.name.value.trim();
+    const nascimento = this.birthdate.value;
+    const email = this.email.value.trim();
+    const genero = this.gender.value;
+    const senha = this.password.value;
+
+    const errorDiv = document.getElementById('register-error');
+
+    if (!nome || !nascimento || !email || !genero || !senha) {
+      errorDiv.textContent = 'Por favor, preencha todos os campos.';
+      errorDiv.style.display = 'block';
+      return;
     }
 
-    document.getElementById('login-form').addEventListener('submit', function(e){
-      e.preventDefault();
-      clearErrors();
+    const usuario = { nome, nascimento, email, genero, senha };
 
-      const role = document.getElementById('role').value;
-      const managerPassword = document.getElementById('manager-password').value;
-      const email = this.email.value.trim();
-      const senha = this.password.value;
-      const errorDiv = document.getElementById('login-error');
+    if (!salvarUsuario(usuario)) {
+      errorDiv.textContent = 'E-mail já cadastrado.';
+      errorDiv.style.display = 'block';
+      return;
+    }
 
-      if(!role){
-        errorDiv.textContent='Selecione seu papel (Aluno ou Gestor).';
-        errorDiv.style.display='block';
-        return;
-      }
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    alert('Cadastro realizado com sucesso!');
+    window.location.href = 'home.html';
+  });
 
-      if(role==='Gestor' && managerPassword!=='dand4'){
-        errorDiv.textContent='Senha do gestor incorreta.';
-        errorDiv.style.display='block';
-        return;
-      }
+  // Login
+  document.getElementById('login-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    clearErrors();
 
-      const usuario = validarLogin(email, senha);
-      if(!usuario){
-        errorDiv.textContent='Email ou senha incorretos.';
-        errorDiv.style.display='block';
-        return;
-      }
+    const role = document.getElementById('role').value;
+    const managerPassword = document.getElementById('manager-password').value;
+    const email = this.email.value.trim();
+    const senha = this.password.value;
+    const errorDiv = document.getElementById('login-error');
 
-      localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-      localStorage.setItem('role', role);
-      localStorage.setItem('nomeUsuario', usuario.nome);
+    if (!role) {
+      errorDiv.textContent = 'Selecione seu papel (Aluno ou Gestor).';
+      errorDiv.style.display = 'block';
+      return;
+    }
 
-      window.location.href='index.html';
-    });
-  </script>
+    if (role === 'Gestor' && managerPassword !== 'dand4') {
+      errorDiv.textContent = 'Senha do gestor incorreta.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    const usuario = validarLogin(email, senha);
+
+    if (!usuario) {
+      errorDiv.textContent = 'Email ou senha incorretos.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    localStorage.setItem('papel', role);
+    alert('Login realizado com sucesso!');
+    window.location.href = 'home.html';
+  });
+
+  // Esqueci a senha
+  document.getElementById('forgot-password-link').addEventListener('click', () => {
+    const email = prompt('Digite seu e-mail para recuperar a senha:');
+    if (!email) return alert('E-mail não informado.');
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    const usuario = usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+    if (!usuario) {
+      alert('E-mail não cadastrado.');
+      return;
+    }
+
+    alert(`Sua senha é: ${usuario.senha}`);
+  });
+</script>
+
 </body>
 </html>
