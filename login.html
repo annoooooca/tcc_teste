@@ -2,274 +2,424 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login & Cadastro</title>
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #1E3A8A;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #333;
-  }
-  .container {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px 30px;
-    width: 320px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  }
-  h2 {
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  label {
-    font-weight: bold;
-    font-size: 13px;
-  }
-  input, select, button {
-    width: 100%;
-    margin: 8px 0 15px 0;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  button {
-    background: #6C63FF;
-    color: white;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background: #574ef6;
-  }
-  .toggle-link {
-    color: #1E3A8A;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    margin-top: -10px;
-  }
-  .error-msg {
-    color: red;
-    font-size: 13px;
-    margin-bottom: 10px;
-    text-align: center;
-    display: none;
-  }
-  .forgot-password {
-    text-align: right;
-    color: #1E3A8A;
-    font-size: 12px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    text-decoration: underline;
-  }
-  #back-to-login {
-    background: #ccc;
-    color: #333;
-    margin-top: -10px;
-  }
-  #back-to-login:hover {
-    background: #aaa;
-  }
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entre Alunos - Login</title>
+ 
+  <style>
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background: linear-gradient(135deg, #bcdcff, #d9ecff, #c7e2ff);
+
+      height: 100vh;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+    }
+ 
+    .container {
+
+      background: #ffffffcc;
+
+      backdrop-filter: blur(10px);
+
+      padding: 40px;
+
+      border-radius: 20px;
+
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+
+      width: 350px;
+
+      text-align: center;
+
+    }
+ 
+    h1 {
+
+      margin-bottom: 15px;
+
+      color: #2979ff;
+
+    }
+ 
+    select, input {
+
+      width: 100%;
+
+      padding: 10px;
+
+      margin: 8px 0;
+
+      border: 1px solid #a7c9ff;
+
+      border-radius: 10px;
+
+      background: #eef7ff;
+
+    }
+ 
+    button {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: none;
+
+      border-radius: 10px;
+
+      background: #2979ff;
+
+      color: white;
+
+      font-size: 15px;
+
+      margin-top: 10px;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+
+    }
+ 
+    button:hover {
+
+      background: #1f5dcc;
+
+    }
+ 
+    .link {
+
+      margin-top: 15px;
+
+      display: block;
+
+      color: #2979ff;
+
+      text-decoration: none;
+
+    }
+ 
+    .link:hover {
+
+      text-decoration: underline;
+
+    }
 </style>
 </head>
+ 
 <body>
-
-<div class="container" id="login-container">
-  <h2>Login</h2>
-  <div class="error-msg" id="login-error"></div>
-  <form id="login-form" autocomplete="off">
-    <label for="role">Escolha seu papel</label>
-    <select id="role" required>
-      <option value="" disabled selected>Selecione</option>
-      <option value="Aluno">Aluno</option>
-      <option value="Gestor">Gestor/Professor</option>
-    </select>
-    
-    <div id="manager-pass-container" style="display:none;">
-      <label for="manager-password">Senha do Gestor</label>
-      <input type="password" id="manager-password" placeholder="Digite a senha do gestor" />
-    </div>
-
-    <label for="login-email">Email</label>
-    <input type="email" id="login-email" name="email" placeholder="Digite seu e-mail" required />
-
-    <label for="login-password">Senha</label>
-    <input type="password" id="login-password" name="password" placeholder="••••••••" required />
-
-    <div class="forgot-password" id="forgot-password-link">Esqueceu a senha?</div>
-    <button type="submit">Entrar</button>
-  </form>
-  <div class="toggle-link" id="go-to-register">Não tem uma conta? Cadastre-se</div>
+ 
+  <!-- LOGIN -->
+<div class="container" id="loginArea">
+<h1>Entre Alunos</h1>
+<h3>Login</h3>
+ 
+    <select id="tipoUsuario">
+<option value="aluno">Sou Aluno</option>
+<option value="gestor">Sou Gestor</option>
+</select>
+ 
+    <input type="email" id="emailLogin" placeholder="E-mail" />
+<input type="password" id="senhaLogin" placeholder="Senha" />
+ 
+    <button onclick="login()">Entrar</button>
+ 
+    <p style="font-size:14px; margin-top:15px;">
+<a class="link" href="#" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</a>
+</p>    
+<a class="link" href="#" onclick="mostrarRecuperar()">Esqueci minha senha</a>
 </div>
-
-<div class="container" id="register-container" style="display:none;">
-  <h2>Cadastro</h2>
-  <div class="error-msg" id="register-error"></div>
-  <form id="register-form" autocomplete="off">
-    <label for="name">Nome</label>
-    <input type="text" id="name" name="name" placeholder="Seu nome completo" required />
-    <label for="birthdate">Data de nascimento</label>
-    <input type="date" id="birthdate" name="birthdate" required />
-    <label for="register-email">Email</label>
-    <input type="email" id="register-email" name="email" placeholder="Digite seu e-mail" required />
-    <label for="gender">Gênero</label>
-    <select id="gender" name="gender" required>
-      <option value="" disabled selected>Selecione</option>
-      <option value="Feminino">Feminino</option>
-      <option value="Masculino">Masculino</option>
-      <option value="Prefiro não dizer">Prefiro não dizer</option>
-    </select>
-    <label for="register-password">Senha</label>
-    <input type="password" id="register-password" name="password" placeholder="••••••••" required />
-    <button type="submit">Cadastrar</button>
-    <button type="button" id="back-to-login">Voltar para login</button>
-  </form>
+ 
+  <!-- CADASTRO -->
+<div class="container" id="cadastroArea" style="display:none;">
+<h1>Cadastro</h1>
+ 
+    <select id="cadTipo">
+<option value="aluno">Aluno</option>
+<option value="gestor">Gestor</option>
+</select>
+ 
+    <input type="text" id="cadNome" placeholder="Nome completo" />
+ 
+    <div id="camposAluno">
+<input type="text" id="cadTurma" placeholder="Turma (ex: 2A)" />
+<input type="text" id="cadMatricula" placeholder="RA do Aluno" />
 </div>
-
+ 
+    <div id="camposGestor" style="display:none;">
+<input type="text" id="cadCargo" placeholder="Cargo (ex: Coordenador)" />
+<input type="text" id="cadCodigoGestor" placeholder="Código de Autorização" />
+</div>
+ 
+    <input type="email" id="cadEmail" placeholder="E-mail" />
+<input type="password" id="cadSenha" placeholder="Senha" />
+ 
+    <button onclick="cadastrar()">Cadastrar</button>
+<a class="link" href="#" onclick="mostrarLogin()">Já tenho conta</a>
+</div>
+ 
+  <!-- RECUPERAÇÃO DE SENHA -->
+<div class="container" id="recuperarArea" style="display:none;">
+<h1>Recuperar Senha</h1>
+ 
+    <div id="recPasso1">
+<p>Digite seu e-mail cadastrado:</p>
+<input type="email" id="recEmail" placeholder="E-mail" />
+<button onclick="verificarEmail()">Continuar</button>
+</div>
+ 
+    <div id="recPasso2" style="display:none;">
+<p>E-mail encontrado! Digite sua nova senha:</p>
+<input type="password" id="novaSenha" placeholder="Nova senha" />
+<button onclick="salvarNovaSenha()">Salvar nova senha</button>
+</div>
+ 
+    <a class="link" href="#" onclick="mostrarLogin()">Voltar</a>
+</div>
+ 
 <script>
-  // Alternar entre login e cadastro
-  const loginContainer = document.getElementById('login-container');
-  const registerContainer = document.getElementById('register-container');
+
+/* ----------------  TROCA DE ÁREAS (TELAS) ---------------- */
  
-  document.getElementById('go-to-register').onclick = () => {
-    loginContainer.style.display = 'none';
-    registerContainer.style.display = 'block';
-    clearErrors();
-  };
+function mostrarCadastro() {
+
+  loginArea.style.display = "none";
+
+  recuperarArea.style.display = "none";
+
+  cadastroArea.style.display = "block";
+
+}
  
-  document.getElementById('back-to-login').onclick = () => {
-    registerContainer.style.display = 'none';
-    loginContainer.style.display = 'block';
-    clearErrors();
-  };
+function mostrarLogin() {
 
-  function clearErrors() {
-    document.getElementById('login-error').style.display = 'none';
-    document.getElementById('register-error').style.display = 'none';
+  cadastroArea.style.display = "none";
+
+  recuperarArea.style.display = "none";
+
+  loginArea.style.display = "block";
+
+}
+ 
+function mostrarRecuperar() {
+
+  loginArea.style.display = "none";
+
+  cadastroArea.style.display = "none";
+
+  recuperarArea.style.display = "block";
+
+}
+ 
+/* --------- MOSTRAR CAMPOS CORRETOS NO CADASTRO --------- */
+
+document.getElementById("cadTipo").addEventListener("change", atualizarCampos);
+
+function atualizarCampos() {
+
+  const tipo = cadTipo.value;
+
+  camposAluno.style.display = tipo === "aluno" ? "block" : "none";
+
+  camposGestor.style.display = tipo === "gestor" ? "block" : "none";
+
+}
+ 
+/* ---------------------- CADASTRAR ---------------------- */
+ 
+function cadastrar() {
+
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+ 
+  const tipo = cadTipo.value;
+
+  const nome = cadNome.value.trim();
+
+  const email = cadEmail.value.trim();
+
+  const senha = cadSenha.value.trim();
+ 
+  if (!nome || !email || !senha) {
+
+    alert("Preencha todos os campos!");
+
+    return;
+
+  }
+ 
+  let novoUsuario = { tipo, nome, email, senha };
+ 
+  if (tipo === "aluno") {
+
+    const turma = cadTurma.value.trim();
+
+    const ra = cadMatricula.value.trim();
+ 
+    if (!turma || !ra) {
+
+      alert("Preencha todos os campos de aluno!");
+
+      return;
+
+    }
+ 
+    novoUsuario.turma = turma;
+
+    novoUsuario.ra = ra;
+
+  }
+ 
+  if (tipo === "gestor") {
+
+    const cargo = cadCargo.value.trim();
+
+    const codigoGestor = cadCodigoGestor.value.trim();
+ 
+    if (!cargo || !codigoGestor) {
+
+      alert("Preencha todos os campos de gestor!");
+
+      return;
+
+    }
+ 
+    novoUsuario.cargo = cargo;
+
+    novoUsuario.codigoGestor = codigoGestor;
+
+  }
+ 
+  usuarios.push(novoUsuario);
+
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+  alert("Cadastro realizado!");
+
+  mostrarLogin();
+
+}
+ 
+/* ---------------------- LOGIN (ATUALIZADO) ---------------------- */
+ 
+tipoUsuario.addEventListener("change", function () {
+
+  senhaLogin.placeholder = tipoUsuario.value === "gestor"  
+
+    ? "Senha do Gestor" 
+
+    : "Senha";
+
+});
+ 
+function login() {
+
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+ 
+  const email = emailLogin.value.trim();
+
+  const senha = senhaLogin.value.trim();
+
+  const tipo = tipoUsuario.value;
+ 
+  if (!email || !senha) {
+
+    alert("Preencha todos os campos!");
+
+    return;
+
+  }
+ 
+  const encontrado = usuarios.find(
+
+    u => u.email === email && u.senha === senha && u.tipo === tipo
+
+  );
+ 
+  if (encontrado) {
+
+    alert("Bem-vindo, " + encontrado.nome + "!");
+
+    window.location.href = "home.html";  
+
+  } else {
+
+    alert("Dados incorretos.");
+
   }
 
-  // Mostrar campo de senha do gestor
-  const roleSelect = document.getElementById('role');
-  const managerPassContainer = document.getElementById('manager-pass-container');
-  roleSelect.addEventListener('change', () => {
-    if (roleSelect.value === 'Gestor') {
-      managerPassContainer.style.display = 'block';
-    } else {
-      managerPassContainer.style.display = 'none';
-    }
-  });
+}
+ 
+/* ---------------- RECUPERAÇÃO DE SENHA (SEM CÓDIGO) ---------------- */
+ 
+let usuarioRecuperacao = null;
+ 
+function verificarEmail() {
 
-  // Salvar usuário no localStorage
-  function salvarUsuario(usuario) {
-    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    if (usuarios.some(u => u.email.toLowerCase() === usuario.email.toLowerCase())) return false;
-    usuarios.push(usuario);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    return true;
+  const emailDigitado = recEmail.value.trim();
+
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+ 
+  usuarioRecuperacao = usuarios.find(u => u.email === emailDigitado);
+ 
+  if (!usuarioRecuperacao) {
+
+    alert("E-mail não encontrado!");
+
+    return;
+
   }
+ 
+  recPasso1.style.display = "none";
 
-  // Validar login
-  function validarLogin(email, senha) {
-    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    return usuarios.find(u => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha);
+  recPasso2.style.display = "block";
+
+}
+ 
+function salvarNovaSenha() {
+
+  const nova = novaSenha.value.trim();
+
+  if (!nova) {
+
+    alert("Digite uma nova senha!");
+
+    return;
+
   }
+ 
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+ 
+  usuarios = usuarios.map(u => {
 
-  // Cadastro
-  document.getElementById('register-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    clearErrors();
+    if (u.email === usuarioRecuperacao.email) {
 
-    const nome = this.name.value.trim();
-    const nascimento = this.birthdate.value;
-    const email = this.email.value.trim();
-    const genero = this.gender.value;
-    const senha = this.password.value;
+      u.senha = nova;
 
-    const errorDiv = document.getElementById('register-error');
-
-    if (!nome || !nascimento || !email || !genero || !senha) {
-      errorDiv.textContent = 'Por favor, preencha todos os campos.';
-      errorDiv.style.display = 'block';
-      return;
     }
 
-    const usuario = { nome, nascimento, email, genero, senha };
+    return u;
 
-    if (!salvarUsuario(usuario)) {
-      errorDiv.textContent = 'E-mail já cadastrado.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    alert('Cadastro realizado com sucesso!');
-    window.location.href = 'login.html';
   });
+ 
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
-  // Login
-  document.getElementById('login-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    clearErrors();
+  alert("Senha alterada!");
 
-    const role = document.getElementById('role').value;
-    const managerPassword = document.getElementById('manager-password').value;
-    const email = this.email.value.trim();
-    const senha = this.password.value;
-    const errorDiv = document.getElementById('login-error');
+  mostrarLogin();
 
-    if (!role) {
-      errorDiv.textContent = 'Selecione seu papel (Aluno ou Gestor).';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    if (role === 'Gestor' && managerPassword !== 'dand4') {
-      errorDiv.textContent = 'Senha do gestor incorreta.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    const usuario = validarLogin(email, senha);
-
-    if (!usuario) {
-      errorDiv.textContent = 'Email ou senha incorretos.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    localStorage.setItem('papel', role);
-    alert('Login realizado com sucesso!');
-    window.location.href = 'login.html';
-  });
-
-  // Esqueci a senha
-  document.getElementById('forgot-password-link').addEventListener('click', () => {
-    const email = prompt('Digite seu e-mail para recuperar a senha:');
-    if (!email) return alert('E-mail não informado.');
-
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const usuario = usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
-
-    if (!usuario) {
-      alert('E-mail não cadastrado.');
-      return;
-    }
-
-    alert(`Sua senha é: ${usuario.senha}`);
-  });
+}
 </script>
-
+ 
 </body>
 </html>
-
+ 
