@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Jogo do Simon com Acessibilidade</title>
+
+    <style>
+
+        :root {
+
+            --cor-verde: #2ecc71;
+
+            --cor-vermelha: #e74c3c;
+
+            --cor-amarela: #f1c40f;
+
+            --cor-azul: #3498db;
+
+            --cor-fundo: #2c3e50;
+
+        }
+
+
+
+        * {
+
+            box-sizing: border-box;
+
+            font-family: Arial, sans-serif;
+
+        }
+
+
+
+        body {
+
+            margin: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+            background-color: #f0f0f0;
+
+            padding: 20px;
+
+        }
+
+
+
+        .back-button {
+
+            position: absolute;
+
+            top: 20px;
+
+            left: 20px;
+
+            padding: 10px 20px;
+
+            background-color: #555;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+
+            transition: background-color 0.3s ease;
+
+        }
+
+
+
+        .back-button:hover {
+
+            background-color: #777;
+
+        }
+
+
+
+        @media (max-width: 480px) {
+
+            .back-button {
+
+                top: 10px;
+
+                left: 10px;
+
+                padding: 8px 15px;
+
+                font-size: 0.9em;
+
+            }
+
+        }
+
+
+
+        h1 {
+
+            color: var(--cor-fundo);
+
+            text-align: center;
+
+        }
+
+
+
+        .container {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 20px;
+
+        }
+
+
+
+        .placar {
+
+            font-size: 2em;
+
+            color: var(--cor-fundo);
+
+            font-weight: bold;
+
+        }
+
+
+
+        .tabuleiro-simon {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            grid-template-rows: 1fr 1fr;
+
+            gap: 20px;
+
+            width: 90vmin;
+
+            max-width: 500px;
+
+            aspect-ratio: 1 / 1;
+
+            border-radius: 50%;
+
+            background-color: var(--cor-fundo);
+
+            padding: 20px;
+
+        }
+
+
+
+        .btn-simon {
+
+            width: 100%;
+
+            aspect-ratio: 1 / 1;
+
+            border: 5px solid rgba(0, 0, 0, 0.5);
+
+            cursor: pointer;
+
+            transition: opacity 0.2s, transform 0.2s;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+
+
+        .btn-simon:hover {
+
+            transform: scale(1.02);
+
+        }
+
+
+
+        .btn-simon:active,
+
+        .btn-simon.ativo {
+
+            opacity: 0.8;
+
+            border-color: #f7efe7;
+
+        }
+
+
+
+        .btn-simon-verde {
+
+            background-color: var(--cor-verde);
+
+            border-top-left-radius: 100%;
+
+        }
+
+
+
+        .btn-simon-vermelho {
+
+            background-color: var(--cor-vermelha);
+
+            border-top-right-radius: 100%;
+
+        }
+
+
+
+        .btn-simon-amarelo {
+
+            background-color: var(--cor-amarela);
+
+            border-bottom-left-radius: 100%;
+
+        }
+
+
+
+        .btn-simon-azul {
+
+            background-color: var(--cor-azul);
+
+            border-bottom-right-radius: 100%;
+
+        }
+
+
+
+        #btn-iniciar {
+
+            padding: 15px 30px;
+
+            font-size: 1.2em;
+
+            font-weight: bold;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background-color: var(--cor-fundo);
+
+            color: #fff;
+
+            cursor: pointer;
+
+            transition: background-color 0.3s, transform 0.2s;
+
+            margin-top: 20px;
+
+        }
+
+
+
+        #btn-iniciar:hover {
+
+            background-color: #34495e;
+
+        }
+
+
+
+        #btn-iniciar:disabled {
+
+            background-color: #7f8c8d;
+
+            cursor: not-allowed;
+
+        }
+
+
+
+        .controles-adicionais {
+
+            display: flex;
+
+            gap: 15px;
+
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+
+
+        #seletor-daltonismo {
+
+            padding: 10px 15px;
+
+            font-size: 16px;
+
+            border-radius: 5px;
+
+            border: 1px solid #ccc;
+
+        }
+
+
+
+        .protanopia {
+
+            filter: url(#protanopia);
+
+        }
+
+
+
+        .deuteranopia {
+
+            filter: url(#deuteranopia);
+
+        }
+
+
+
+        .tritanopia {
+
+            filter: url(#tritanopia);
+
+        }
+
+        /* === MODAL DE RANKING (ABA FLUTUANTE) === */
+
+#ranking-modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.8);
+
+  display: none;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 1000;
+
+  animation: fadeIn 0.4s ease;
+
+}
+
+
+
+@keyframes fadeIn {
+
+  from { opacity: 0; }
+
+  to { opacity: 1; }
+
+}
+
+
+
+#ranking-box {
+
+  background: linear-gradient(135deg, #00c6ff, #0072ff, #ff00c8, #ff9900);
+
+  background-size: 400% 400%;
+
+  border-radius: 25px;
+
+  padding: 35px 30px;
+
+  width: 90%;
+
+  max-width: 420px;
+
+  text-align: center;
+
+  color: white;
+
+  font-family: "Poppins", sans-serif;
+
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+
+  transform: scale(0.8);
+
+  animation: popup 0.4s ease forwards, gradientMove 6s ease infinite;
+
+}
+
+
+
+@keyframes popup {
+
+  to { transform: scale(1); }
+
+}
+
+
+
+@keyframes gradientMove {
+
+  0% { background-position: 0% 50%; }
+
+  50% { background-position: 100% 50%; }
+
+  100% { background-position: 0% 50%; }
+
+}
+
+
+
+#ranking-box h3 {
+
+  font-size: 1.5em;
+
+  margin-bottom: 20px;
+
+  letter-spacing: 1px;
+
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+
+}
+
+
+
+#ranking-list {
+
+  max-height: 250px;
+
+  overflow-y: auto;
+
+  margin-bottom: 20px;
+
+}
+
+
+
+#ranking-list p {
+
+  margin: 8px 0;
+
+  font-weight: 600;
+
+  color: #fff;
+
+  background: rgba(255,255,255,0.15);
+
+  padding: 10px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+
+  transition: 0.2s;
+
+}
+
+
+
+#ranking-list p:hover {
+
+  background: rgba(255,255,255,0.3);
+
+  transform: scale(1.03);
+
+}
+
+
+
+#ranking-fechar {
+
+  background: white;
+
+  color: #0072ff;
+
+  border: none;
+
+  border-radius: 30px;
+
+  padding: 12px 32px;
+
+  font-size: 1em;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+  box-shadow: 0 4px 12px rgba(255,255,255,0.4);
+
+}
+
+
+
+#ranking-fechar:hover {
+
+  background: #0072ff;
+
+  color: white;
+
+  transform: scale(1.08);
+
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="index.html" class="back-button" aria-label="Voltar para a página inicial">Voltar ao Menu</a>
+
+
+
+    <div class="container">
+
+        <h1>Jogo do Simon</h1>
+
+        <div class="placar" id="placar">Nível: 0</div>
+
+
+
+        <div class="tabuleiro-simon">
+
+            <div class="btn-simon btn-simon-verde" data-cor="verde" data-key="q"></div>
+
+            <div class="btn-simon btn-simon-vermelho" data-cor="vermelho" data-key="w"></div>
+
+            <div class="btn-simon btn-simon-amarelo" data-cor="amarelo" data-key="e"></div>
+
+            <div class="btn-simon btn-simon-azul" data-cor="azul" data-key="r"></div>
+
+        </div>
+
+
+
+        <button id="btn-iniciar">Iniciar Jogo</button>
+
+        <button id="btn-ranking">Ver Ranking</button>
+
+
+
+
+
+        <div class="controles-adicionais">
+
+            <label for="seletor-daltonismo" style="color: #2c3e50; font-weight: bold;">Simular Daltonismo:</label>
+
+            <select id="seletor-daltonismo">
+
+                <option value="">Nenhum</option>
+
+                <option value="protanopia">Protanopia</option>
+
+                <option value="deuteranopia">Deuteranopia</option>
+
+                <option value="tritanopia">Tritanopia</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+
+    <svg style="display: none;">
+
+        <filter id="protanopia">
+
+            <feColorMatrix in="SourceGraphic" type="matrix"
+
+                values="0.567, 0.433, 0, 0, 0
+
+                        0.558, 0.442, 0, 0, 0
+
+                        0, 0.242, 0.758, 0, 0
+
+                        0, 0, 0, 1, 0" />
+
+        </filter>
+
+        <filter id="deuteranopia">
+
+            <feColorMatrix in="SourceGraphic" type="matrix"
+
+                values="0.625, 0.375, 0, 0, 0
+
+                        0.7, 0.3, 0, 0, 0
+
+                        0, 0.3, 0.7, 0, 0
+
+                        0, 0, 0, 1, 0" />
+
+        </filter>
+
+        <filter id="tritanopia">
+
+            <feColorMatrix in="SourceGraphic" type="matrix"
+
+                values="0.95, 0.05, 0, 0, 0
+
+                        0, 0.433, 0.567, 0, 0
+
+                        0, 0.475, 0.525, 0, 0
+
+                        0, 0, 0, 1, 0" />
+
+        </filter>
+
+    </svg>
+
+    <div id="ranking-modal" style="display: none;">
+
+  <div id="ranking-box">
+
+    <h3 id="ranking-titulo">🏆 Ranking Local</h3>
+
+    <div id="ranking-list"></div>
+
+    <button id="ranking-fechar" onclick="fecharRanking()">Voltar ao Jogo</button>
+
+  </div>
+
+</div>
+
+
+
+    <script>
+
+        const placar = document.getElementById('placar');
+
+        const btnIniciar = document.getElementById('btn-iniciar');
+
+        const botoesSimon = document.querySelectorAll('.btn-simon');
+
+        const seletorDaltonismo = document.getElementById('seletor-daltonismo');
+
+        const body = document.body;
+
+
+
+        const sons = {
+
+            verde: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'),
+
+            vermelho: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3'),
+
+            amarelo: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound3.mp3'),
+
+            azul: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound4.mp3')
+
+        };
+
+
+
+        const cores = ['verde', 'vermelho', 'amarelo', 'azul'];
+
+        let sequenciaDoJogo = [];
+
+        let sequenciaDoJogador = [];
+
+        let nivel = 0;
+
+        let emAndamento = false;
+
+
+
+        function iniciarJogo() {
+
+            if (emAndamento) return;
+
+            emAndamento = true;
+
+            nivel = 0;
+
+            sequenciaDoJogo = [];
+
+            sequenciaDoJogador = [];
+
+            btnIniciar.disabled = true;
+
+            setTimeout(adicionarCor, 1000);
+
+        }
+
+
+
+        function adicionarCor() {
+
+            sequenciaDoJogador = [];
+
+            nivel++;
+
+            placar.innerText = `Nível: ${nivel}`;
+
+            const corAleatoria = cores[Math.floor(Math.random() * cores.length)];
+
+            sequenciaDoJogo.push(corAleatoria);
+
+            tocarSequencia();
+
+        }
+
+
+
+        function tocarSequencia() {
+
+            let i = 0;
+
+            const intervalo = nivel > 8 ? 400 : nivel > 4 ? 600 : 800;
+
+            const intervaloId = setInterval(() => {
+
+                const cor = sequenciaDoJogo[i];
+
+                tocarBotao(cor);
+
+                i++;
+
+                if (i >= sequenciaDoJogo.length) clearInterval(intervaloId);
+
+            }, intervalo);
+
+        }
+
+
+
+        function tocarBotao(cor) {
+
+            const botao = document.querySelector(`[data-cor="${cor}"]`);
+
+            if (botao) {
+
+                botao.classList.add('ativo');
+
+                sons[cor].play();
+
+                setTimeout(() => botao.classList.remove('ativo'), 400);
+
+            }
+
+        }
+
+
+
+        function verificarJogada(jogada) {
+
+            if (sequenciaDoJogador[jogada] === sequenciaDoJogo[jogada]) {
+
+                if (sequenciaDoJogador.length === sequenciaDoJogo.length) {
+
+                    placar.innerText = "Bom trabalho!";
+
+                    setTimeout(adicionarCor, 1000);
+
+                }
+
+            } else {
+
+                fimDeJogo();
+
+            }
+
+        }
+
+
+
+        function fimDeJogo() {
+
+    emAndamento = false;
+
+    placar.innerText = `Fim de Jogo! Nível: ${nivel - 1}`;
+
+    btnIniciar.disabled = false;
+
+
+
+    const nome = prompt("Digite seu nome para o ranking:");
+
+    if (nome) {
+
+        salvarRanking(nome, nivel - 1);
+
+        mostrarRanking();
+
+    }
+
+
+
+    // Mantém seu redirecionamento opcional
+
+    if (!localStorage.getItem("feedbackRespondido")) {
+
+        localStorage.setItem("feedbackRespondido", "true");
+
+        window.location.href = "https://forms.gle/NWZF6yYNin5kk8kc6";
+
+    }
+
+}
+
+
+
+        function salvarRanking(nome, pontuacao) {
+
+    const modo = seletorDaltonismo.value || "normal"; // se não tiver modo, é "normal"
+
+    const chave = `rankingSimon_${modo}`;
+
+    const ranking = JSON.parse(localStorage.getItem(chave)) || [];
+
+
+
+    ranking.push({ nome, pontuacao });
+
+    ranking.sort((a, b) => b.pontuacao - a.pontuacao);
+
+    const top10 = ranking.slice(0, 10);
+
+
+
+    localStorage.setItem(chave, JSON.stringify(top10));
+
+}
+
+
+
+function mostrarRanking() {
+
+    // Referências aos elementos do novo modal
+
+    const rankingModal = document.getElementById('ranking-modal');
+
+    const rankingList = document.getElementById('ranking-list');
+
+    const rankingTitulo = document.getElementById('ranking-titulo');
+
+   
+
+    // 1. Determina o modo atual e a chave (Igual ao seu código anterior do Simon)
+
+    const modo = seletorDaltonismo.value || "normal";
+
+    const chave = `rankingSimon_${modo}`;
+
+    const ranking = JSON.parse(localStorage.getItem(chave)) || [];
+
+
+
+    const nomeModo =
+
+        modo === "normal"
+
+            ? "Normal"
+
+            : modo.charAt(0).toUpperCase() + modo.slice(1);
+
+
+
+    // Som de abertura opcional (Copiado do Jogo da Memória)
+
+    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2538/2538-preview.mp3');
+
+    audio.volume = 0.3;
+
+    audio.play();
+
+   
+
+    // 2. Atualiza o Título
+
+    rankingTitulo.textContent = `🏆 Ranking | Modo ${nomeModo} 🏆`;
+
+
+
+    // 3. Constrói a lista de ranking (usando <p> como no Jogo da Memória)
+
+    rankingList.innerHTML = ''; // Limpa a lista anterior
+
+   
+
+    if (ranking.length === 0) {
+
+        const vazio = document.createElement('p');
+
+        vazio.textContent = "Nenhum recorde salvo neste modo ainda!";
+
+        rankingList.appendChild(vazio);
+
+    } else {
+
+        // O Jogo do Simon usa "pontuacao" (nível)
+
+        ranking.forEach((jogador, i) => {
+
+            const linha = document.createElement('p');
+
+            const posicao = i + 1;
+
+           
+
+            linha.textContent = `${posicao}. ${jogador.nome} — ${jogador.pontuacao} pontos`;
+
+            rankingList.appendChild(linha);
+
+        });
+
+    }
+
+
+
+    // 4. Exibe o modal
+
+    rankingModal.style.display = 'flex';
+
+}
+
+
+
+// Nova função para fechar o modal
+
+function fecharRanking() {
+
+    document.getElementById('ranking-modal').style.display = 'none';
+
+}
+
+
+
+// Certifique-se de que o botão de fechar do modal chame esta nova função.
+
+// Já adicionamos o onclick="fecharRanking()" no HTML do modal no Passo 1.
+
+
+
+// Event Listener para fechar o modal ao clicar fora
+
+window.onclick = function(event) {
+
+    const modal = document.getElementById('ranking-modal');
+
+    if (event.target == modal) {
+
+        modal.style.display = 'none';
+
+    }
+
+}
+
+
+
+
+
+
+
+        btnIniciar.addEventListener('click', iniciarJogo);
+
+
+
+        seletorDaltonismo.addEventListener('change', () => {
+
+            body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
+
+            const tipo = seletorDaltonismo.value;
+
+            if (tipo) body.classList.add(tipo);
+
+            const nomeModo = tipo || "normal";
+
+    document.getElementById("btn-ranking").innerText = `Ver Ranking (${nomeModo})`;
+
+        });
+
+
+
+        botoesSimon.forEach(botao => {
+
+            botao.addEventListener('click', () => {
+
+                const cor = botao.dataset.cor;
+
+                if (emAndamento) {
+
+                    tocarBotao(cor);
+
+                    sequenciaDoJogador.push(cor);
+
+                    verificarJogada(sequenciaDoJogador.length - 1);
+
+                }
+
+            });
+
+        });
+
+
+
+        document.addEventListener('keydown', (e) => {
+
+            const tecla = e.key.toLowerCase();
+
+            const botao = document.querySelector(`[data-key="${tecla}"]`);
+
+            if (botao && emAndamento) {
+
+                const cor = botao.dataset.cor;
+
+                tocarBotao(cor);
+
+                sequenciaDoJogador.push(cor);
+
+                verificarJogada(sequenciaDoJogador.length - 1);
+
+            }
+
+        });
+
+        document.getElementById("btn-ranking").addEventListener("click", mostrarRanking);
+
+
+
+    </script>
+    <!-- Botão de instruções no canto superior direito -->
+<button id="btnInstrucoesSimon" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 10px 15px;
+  background-color: #1E3A8A;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+">
+  Instruções
+</button>
+
+<!-- Modal de instruções -->
+<div id="modalInstrucoesSimon" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="
+    background-color: #fff;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    position: relative;
+  ">
+    <h2 style="margin-top:0;">Jogo do Simon</h2>
+    <p><strong>Objetivo:</strong> Repetir a sequência de cores/sons exibida pelo jogo. A sequência aumenta à medida que você avança.</p>
+    <p><strong>Controles:</strong> Clique ou toque nos botões de cores correspondentes à sequência apresentada, na ordem correta.</p>
+    <p><strong>Regras:</strong></p>
+    <ul>
+      <li>O jogo mostra uma sequência de cores/sons.</li>
+      <li>Você precisa repetir essa sequência clicando nas cores na ordem certa.</li>
+      <li>Se acertar, o jogo adiciona uma nova cor ao fim da sequência e você repete uma sequência mais longa.</li>
+      <li>Se errar a sequência, você perde.</li>
+      <li>O objetivo é manter a sequência quanto mais tempo possível sem errar.</li>
+    </ul>
+    <button id="fecharModalSimon" style="
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #1E3A8A;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    ">Fechar</button>
+  </div>
+</div>
+
+<!-- Script para abrir/fechar modal -->
+<script>
+  const btnSimon = document.getElementById('btnInstrucoesSimon');
+  const modalSimon = document.getElementById('modalInstrucoesSimon');
+  const fecharSimon = document.getElementById('fecharModalSimon');
+
+  btnSimon.addEventListener('click', () => {
+    modalSimon.style.display = 'flex';
+  });
+
+  fecharSimon.addEventListener('click', () => {
+    modalSimon.style.display = 'none';
+  });
+
+  // Fechar clicando fora da caixa do modal
+  window.addEventListener('click', (e) => {
+    if (e.target === modalSimon) {
+      modalSimon.style.display = 'none';
+    }
+  });
+</script>
+
+
+</body>
+
+
+
+</html>
