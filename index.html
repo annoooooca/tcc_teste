@@ -200,6 +200,10 @@
 
         </button>
 
+        <button id="btnVotacao" onclick="mostrarTela('votacao')" class="hidden w-full text-left flex items-center gap-3 px-3 py-2 rounded hover:bg-white/6">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m-4-3h8m-1-8v-3m0 0v-3m0 3h-4m4 0h-4m-4 0v-3"/></svg>
+            <span class="font-medium">🗳️ Votação</span>
+        </button>
 
 
         <button onclick="mostrarTela('jogos')" class="w-full text-left flex items-center gap-3 px-3 py-2 rounded hover:bg-white/6">
@@ -381,6 +385,20 @@
           <h2 class="text-lg font-semibold text-white">Chapas e Propostas</h2>
 
         </div>
+        <section id="chapas" class="hidden h-full flex flex-col">
+        </section>
+    
+    <section id="votacao" class="hidden h-full flex flex-col">
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold text-white">Votação Grêmio Estudantil</h2>
+        </div>
+        
+        <div class="bg-[var(--panel)] rounded-xl p-5 shadow h-[calc(100vh-64px-48px)] overflow-auto">
+            <iframe src="chapas/votacao.html" class="w-full h-full border-0" frameborder="0"></iframe>
+        </div>
+    </section>
+    <section id="jogos" class="hidden h-full flex flex-col">
+        </section>
 
 
 
@@ -978,7 +996,44 @@
 
     /* ---------- inicial ---------- */
 
-    mostrarTela('avisos');
+
+
+    
+
+    /* ---------- LÓGICA DE VOTAÇÃO (Condicional) ---------- */
+    function checkVotacaoStatus() {
+        const btnVotacao = document.getElementById('btnVotacao');
+        if (!btnVotacao) return;
+
+        // ** ATENÇÃO: AJUSTE ESTAS DATAS PARA O PERÍODO DA SUA ELEIÇÃO **
+        // Mês começa em 0 (Janeiro) até 11 (Dezembro)
+        
+        // Exemplo: Votação Inicia: 26 de Novembro de 2025 (mês 10)
+        const dataInicio = new Date(2025, 10, 25, 0, 0, 0); 
+        
+        // Votação Termina: 28 de Novembro de 2025
+        const dataFim = new Date(2025, 10, 25, 12, 5, 0); 
+
+        const agora = new Date();
+        
+        const votacaoAtiva = (agora >= dataInicio && agora <= dataFim);
+        
+        if (votacaoAtiva) {
+            // Se ATIVA, remove a classe 'hidden' para EXIBIR
+            btnVotacao.classList.remove('hidden'); 
+        } else {
+            // Se INATIVA, adiciona a classe 'hidden' para OCULTAR
+            btnVotacao.classList.add('hidden'); 
+        }
+    }
+
+    /* ---------- inicial ---------- */
+    checkVotacaoStatus(); // Roda a lógica de tempo ao carregar
+    mostrarTela('avisos'); 
+
+</script>
+</body>
+</html>
 
   </script>
 
